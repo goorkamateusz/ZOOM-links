@@ -1,3 +1,15 @@
+<!doctype html>
+<html lang="pl">
+<head>
+   <meta charset="utf-8">
+   <title>ZOOM-links-update</title>
+   <meta name="Author" content="Gorka Mateusz">
+   <meta name="robots" content="noindex,nofollow">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="Short icon" href=""/>
+   <link rel="Stylesheet" type="text/css" href="css/main.css"/>
+</head>
+
 <?php
 	/**
 	 * 1. Próbuje zalogować się do skrzynki mailowej
@@ -77,3 +89,5 @@
 	imap_close( $imapResource );
 
 ?>
+
+</html>

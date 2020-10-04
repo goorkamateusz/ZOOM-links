@@ -44,10 +44,11 @@ class Invitation {
 			/// Znajduje datę spotkania (po angielsku)
 			$pattern = '~(scheduled on ).*(will be held)+~';
 			preg_match( $pattern, $message, $matches );
-			$this->date_angl = str_replace( ["scheduled on "," will be held"], ['',''], $matches[0] );
+			$this->date_ang = str_replace( ["scheduled on "," will be held"], ['',''], $matches[0] );
 
 			/// Tworzy datę spotkania w type danych DataTime
 			$this->date = new DateTime( $this->date_ang );
+
 		}
 		/// 2. Lub konwertuje z stdClass na Invitation
 		else {
@@ -62,6 +63,18 @@ class Invitation {
 		echo "Spotkanie $this->title | $this->date_pl<br/>";
 		echo "| Link: <a href=\"$this->link\">$this->link</a></br>";
 		echo "| Hasło: $this->password<br/>";
+	}
+
+	/**
+	 * Zwraca div html zaproszenia
+	 */
+	public function html(){
+		return	 "<div>"
+					."<a class=\"date\">$this->date_pl</a>"
+					."<a class=\"title\">$this->title</a>"
+				."</div>"
+				."Link: <a href=\"$this->link\">$this->link</a><br/>"
+				."Hasło: <a class=\"passwd\">$this->password</a>";
 	}
 
 	/**
@@ -124,8 +137,6 @@ class Invitation {
 		///- Zwraca tabelę zaproszeń z pliku
 		return json_decode( $json );
 	}
-
-
 
 };
 

@@ -1,0 +1,72 @@
+/* Ogolne */
+body, html, div, section {
+	display:block;
+	margin:0;
+	padding:0;
+}
+
+body, html {
+	width:100%;
+	background-color:#000;
+}
+
+/* Główny */
+main {
+	width:100%;
+	display:flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.invite {
+	width:95%;
+	max-width:600px;
+	margin-top:30px;
+	padding:5px;
+}
+.invite div {
+	width:100%;
+	margin-bottom:5px;
+	float:left;
+}
+.invite .date {
+	font-size:16px;
+	float:left;
+}
+.invite .title {
+	font-size:16px;
+	float:right;
+}
+
+.invite .passwd {
+
+}
+
+/* Czas */
+.future {
+	border: 2px #aaa solid;
+}
+
+.today {
+	border:2px red solid;
+}
+
+.passed {
+	border:2px #555 solid;
+}
+.passed a, .passed {
+	color:#999;
+}
+
+
+/* Czcionki */
+body, html, div, a, p {
+	color:#fff;
+	font-size:14px;
+	font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+a[href] {
+	color: blue;
+}
