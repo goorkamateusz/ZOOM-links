@@ -8,6 +8,7 @@ class Invitation {
 	public $link;		///< Link do spotkania
 	public $password;	///< Hasło do spotkania
 	public $title;		///< Tytuł spotkania
+	public $lecturer;	///< Prowadzący
 	public $date_pl; 	///< Data spotkania po polsku
 	public $date_ang;	///< Data spotkania po angielsku
 	public $date;		///< Data spotkania w typie DateTime
@@ -25,6 +26,11 @@ class Invitation {
 			$pattern = '~[a-z]+://pwr-edu.zoom.us\S+~';
 			preg_match( $pattern, $message, $matches );
 			$this->link = $matches[0];
+
+			/// Znajduje imie nazwisko prowadzącego
+			$pattern = '~(CN="){1}.*("){1}~';
+			preg_match( $pattern, $message, $matches );
+			$this->lecturer = str_replace( ["CN=\"","\""], ['',''], $matches[0] );
 
 			/// Znajduje haslo do spotkania
 			$pattern = '~(Password: )\S+~';
@@ -61,6 +67,7 @@ class Invitation {
 	 */
 	public function display(){
 		echo "Spotkanie $this->title | $this->date_pl<br/>";
+		echo "| Prowadzący: $this->lecturer<br/>";
 		echo "| Link: <a href=\"$this->link\">$this->link</a></br>";
 		echo "| Hasło: $this->password<br/>";
 	}
@@ -73,6 +80,7 @@ class Invitation {
 					."<a class=\"date\">$this->date_pl</a>"
 					."<a class=\"title\">$this->title</a>"
 				."</div>"
+				."Prowadzący: <a>$this->lecturer</a><br/>"
 				."Link: <a href=\"$this->link\">$this->link</a><br/>"
 				."Hasło: <a class=\"passwd\">$this->password</a>";
 	}

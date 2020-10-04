@@ -41,6 +41,7 @@
 	///- Czyta wiadomości i próbuje stworzyć zaproszenia
 	include("class/Invitation.php");
 
+
 	if( ! empty( $emails ) ){
 
 		echo "Przetworzono " . count( $emails ) . " wiadomości.<br/>";
@@ -65,18 +66,13 @@
 			if( $invitation->isOK() ){
 
 				/**
-				 * 3. Zapisuje wiadomości do pliku danych
+				 * 3. Wyświetla zaproszenia
 				 */
-				if( $invitation->save() ){
-
-					echo "Zapisano nowe spotkanie do pliku.<br/>";
-					$invitation->display();
-				}
-
-				/**
-				 * 4. Usuwa wiadomość ze skrzynki
-				 */
-				imap_delete( $imapResource, $email );
+				echo "<hr/>";
+				$invitation->display();
+				echo "<br/>";
+				echo "<p>" . $message . "</p>";
+				echo "<br/>";
 			}
 		}
 	}
@@ -84,7 +80,6 @@
 		echo "Pusta skrzynka.<br/>";
 
 	///- Zamyka skrzynkę
-	imap_expunge( $imapResource );
 	imap_close( $imapResource );
 
 ?>
