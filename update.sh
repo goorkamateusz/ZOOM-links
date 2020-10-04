@@ -1,0 +1,1 @@
+wget -q -O /dev/null http://adres_twojego_serwera/check-mailbox.php

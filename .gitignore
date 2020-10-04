@@ -1,0 +1,24 @@
+# Git ignore - Webproject - Mateusz Gorka
+
+# Dev help files
+send.sh
+
+# Private files
+.ht**
+401.html
+
+# Plugins output
+linecounter.*
+
+# Others file
+*.zip
+*~
+**.log
+
+# Temporary or local
+**/_tmp**
+**/_local**
+**.temp.**
+
+# Input, output data
+data/*
