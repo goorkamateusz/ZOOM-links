@@ -15,13 +15,13 @@
 	 * 1. Próbuje zalogować się do skrzynki mailowej
 	 */
 
-	///- Dołacza dane konfiguracyjne
+	// Dołącza dane konfiguracyjne
 	include("config.php");
 
 	///- Próbuje połączyć się ze skrzynką
 	$imapResource = imap_open( MAIL_MAILBOX, MAIL_ADDRESS, MAIL_PASSWORD );
 
-	///- Jeśli błąd wyrzuca wyjątek
+	/// Jeśli błąd wyrzuca wyjątek z błędem połączenia.
 	if( $imapResource === false )
 		throw new Exception( imap_last_error() );
 
@@ -32,10 +32,10 @@
 	 * 2. Filtruje, czyta wiadomości
 	 */
 
-	/// Filtr przeszukiwania wiadomości
+	///- Filtr przeszukiwania wiadomości, rozpatruje tylko wiadomości z ostatniego tygodnia
 	$search = 'SINCE "' . date("j F Y", strtotime("-7 days")) . '"';
 
-	///- Ładuje przefiltrowane wiadmości
+	// Ładuje przefiltrowane wiadmości
 	$emails = imap_search( $imapResource, $search );
 
 	///- Czyta wiadomości i próbuje stworzyć zaproszenia
@@ -43,7 +43,9 @@
 
 	if( ! empty( $emails ) ){
 
-		echo "Przetworzono " . count( $emails ) . " wiadomości.<br/>";
+		//todo przeczytano
+		// Komunikat o ilości przetowrzonych wiadomości
+		echo "Przeczytano " . count( $emails ) . " wiadomości.<br/>";
 
 		foreach( $emails as $email ){
 
@@ -52,7 +54,7 @@
 			$overview = $overview[0];
 
 			// Filtr nagłówka
-			if( preg_match( '~(@student.pwr.edu.pl)+~', $overview->from ) == 0 )
+			if( preg_match( '~(pwr.edu.pl)+~', $overview->from ) == 0 )
 				continue;
 
 			// Przetwarza treść wiadomości
@@ -62,6 +64,7 @@
 			// Próbuje stworzyć zaproszenie
 			$invitation = new Invitation( $message );
 
+			//todo licznik potworzeń / odrzuconych
 			if( $invitation->isOK() ){
 
 				/**
@@ -74,16 +77,18 @@
 				}
 
 				/**
-				 * 4. Usuwa wiadomość ze skrzynki
+				 * 4. Usuwa wiadomość ze skrzynki (zależnie od konfiguracji)
 				 */
-				imap_delete( $imapResource, $email );
+				if( REMOVE_MAIL )
+					imap_delete( $imapResource, $email );
 			}
 		}
 	}
+	// Komunikat o pustej skrzynce
 	else
 		echo "Pusta skrzynka.<br/>";
 
-	///- Zamyka skrzynkę
+	/// 5. Zamyka skrzynkę
 	imap_expunge( $imapResource );
 	imap_close( $imapResource );
 

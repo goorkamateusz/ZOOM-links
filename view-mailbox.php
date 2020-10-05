@@ -53,7 +53,7 @@
 			$overview = $overview[0];
 
 			// Filtr nagłówka
-			if( preg_match( '~(@student.pwr.edu.pl)+~', $overview->from ) == 0 )
+			if( preg_match( '~(pwr.edu.pl)+~', $overview->from ) == 0 )
 				continue;
 
 			// Przetwarza treść wiadomości
@@ -73,6 +73,8 @@
 				echo "<br/>";
 				echo "<p>" . $message . "</p>";
 				echo "<br/>";
+
+				//idea przycisk do usuwania wiadomości (na pewno, bezpieczeństwo, inne osoby?)
 			}
 		}
 	}

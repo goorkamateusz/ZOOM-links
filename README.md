@@ -1,8 +1,8 @@
-# ZOOM-links V1.0.0
+# ZOOM-links
 
-**Aplikacja do prywatnego urzytku**
+**Aplikacja do prywatnego użytku**
 
-Kod aplikacji ZOOM-links, której zadaniem jest gromadzenie linków do spotkań w programie telekomunikacyjnym ZOOM ze wskazanej skrzynki mailowej.
+Kod aplikacji ZOOM-links, której zadaniem jest gromadzenie linków do spotkań w serwisie telekomunikacyjnym ZOOM ze wskazanej skrzynki mailowej.
 
 <!-- [English README version](README.eng.md) -->
 
@@ -24,27 +24,41 @@ Kod aplikacji ZOOM-links, której zadaniem jest gromadzenie linków do spotkań 
 ## Uruchomienie
 ### Przygotownie i uruchomienie
 1. Odpowiednio ustawić stałe w pliku konfiguracyjnym `config.php`.
-2. Zadbać o odpowiednie ustawienie uprawnień, można posiłkować się skryptem: `init/file-premission.sh`.
-3. Dodać skrypt `check-mailbox.php` do wywołania w CRON.
+2. Umieścić aplikację na komputerze obsługującym wykonywanie skrytów PHP.
+3. Zadbać o odpowiednie ustawienie uprawnień plików, można posiłkować się skryptem: `init/file-premission.sh`.
+4. Dodać skrypt `check-mailbox.php` do wywołania w CRON.
+
+np. poprzez dodanie rekordu w `crontab -e`:
+```
+*/30 * * * * /ścieżka_do_pliku/update.sh
+```
+oraz poprawne skonfigurowanie `ADRES_SERWERA` w skrypcie `update.sh`.
 
 ### Wykorzystanie
-[TODO]
+Podgląd listy zgromadzonych zaproszeń dostępny jest w skrypcie `index.php`.
+
+## Uwaga
+TODO - Skrypt domyślnie usuwa przetworzone wiadomości ze skrzynki mailowej (możliwość konfiguracji w `config.php`).
 
 ## Dokumentacja
-
-## Zawartość
-[TODO]
+TODO
 
 ## Funkcjonalności
-[TODO]
+TODO
 
 ## Wyjątki
-[TODO]
+- Brak dostępu do odczytu lub zapisu pliku `data/invitation-list.json`;
+- Błąd połączenia ze skrzynką mailową;
 
 ## Specyfikacja
 - Język: PHP, JS, CSS, HTML
-- Baza danych MySQL
-- Wykorzystuje jQuery
+- Preferowany system Linux
 
-# Licencja
+## TODO
+- [ ] Tekstowe dodawanie zaproszeń. (inna treść, okno tekstowe copy-paste)
+
+
+
+## Licencja
 Zobacz w pliku [LICENSE.md](LICENSE.md).
+

@@ -10,7 +10,7 @@ body, html {
 	background-color:#000;
 }
 
-/* Główny */
+/* Lista zaproszen */
 main {
 	width:100%;
 	display:flex;
@@ -30,6 +30,17 @@ main {
 	margin-bottom:5px;
 	float:left;
 }
+.invite span {
+	display:flex;
+	flex-wrap: nowrap;
+	width:100%;
+	margin:0;
+	overflow: hidden;
+	color:#aaa;
+}
+.invite a {
+	margin-left:5px;
+}
 .invite .date {
 	font-size:16px;
 	float:left;
@@ -38,27 +49,36 @@ main {
 	font-size:16px;
 	float:right;
 }
-
+.invite .lect {
+	color:#6660ff
+}
+.invite a[href] {
+	overflow: hidden;
+	white-space:nowrap;
+}
 .invite .passwd {
-
+	/*  */
 }
 
 /* Czas */
 .future {
 	border: 2px #aaa solid;
 }
-
 .today {
 	border:2px red solid;
 }
-
 .passed {
 	border:2px #555 solid;
 }
-.passed a, .passed {
+.passed a {
 	color:#999;
 }
-
+.passed a[href] {
+	color:#009;
+}
+.passed span {
+	color:#777;
+}
 
 /* Czcionki */
 body, html, div, a, p {
@@ -66,7 +86,6 @@ body, html, div, a, p {
 	font-size:14px;
 	font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-
 a[href] {
 	color: blue;
 }

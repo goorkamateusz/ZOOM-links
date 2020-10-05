@@ -13,9 +13,11 @@
 
     <main>
     <?php
+        //todo interface do link do view-... i check-... (jeśli nie usuwa)
+
         include( "class/Invitation.php" );
 
-        ///- Pobieranie i sortowanie listy zaproszeń
+        ///- Pobiera i sortuje listę zaproszeń
         $invArr = Invitation::load();
 
         function conv($a){ return new Invitation($a); }
