@@ -1,4 +1,5 @@
 <?php
+header('Content-type: text/html; charset=utf-8');
 
 /**
  * \class Invitation
@@ -27,7 +28,7 @@ class Invitation {
 			///- Znajduje link do spotkania
 			$pattern = '~[a-z]+://pwr-edu.zoom.us\S+~';
 			preg_match( $pattern, $message, $matches );
-			$this->link = $matches[0];
+			$this->link = urlencode( $matches[0] );
 
 			///- Znajduje imie nazwisko prowadzącego
 			$pattern = '~(CN="){1}.*("){1}~';
@@ -79,7 +80,7 @@ class Invitation {
 	public function display(){
 		echo "Spotkanie $this->title | $this->date_pl<br/>";
 		echo "| Prowadzący: $this->lecturer<br/>";
-		echo "| Link: <a href=\"$this->link\">$this->link</a></br>";
+		echo "| Link: <a href=\"". urldecode($this->link) ."\">". urldecode($this->link) ."</a></br>";
 		echo "| Hasło: $this->password<br/>";
 	}
 
@@ -93,7 +94,7 @@ class Invitation {
 					."<a class=\"title\">$this->title</a>"
 				."</div>"
 				."<span>Prowadzący: <a class=\"lect\">$this->lecturer</a></span>"
-				."<span>Link: <a href=\"$this->link\">$this->link</a></span>"
+				."<span>Link: <a href=\"". urldecode($this->link) ."\">". urldecode($this->link) ."</a></span>"
 				."<span>Hasło: <a class=\"passwd\">$this->password</a></span>";
 	}
 
@@ -118,29 +119,48 @@ class Invitation {
 
 		$invlist = NULL;
 
-		/// Jeśli plik danych istnieje, sprawdzamy czy link jest już na liście
-		if( $file = @fopen( "data/invitation-list.json", "r" ) ){
+		/// Czy plik istnieje, jesli nie tworzy go
+		if( file_exists( "data/invitation-list.json" ) ){
+
+			/// Jeśli plik danych istnieje, sprawdzamy czy link jest już na liście
+			$file = fopen( "data/invitation-list.json", "r" );
 
 			$json = '';
 			while( ! feof( $file ) ) $json .= fgets( $file );
 
-			$invlist = json_decode( $json );
+			fclose( $file );
+
+			$invlist = json_decode( utf8_encode($json) );
+
+			if( json_last_error() != JSON_ERROR_NONE ){
+				echo "Błąd czytania: " . json_last_error() . "<br/>" . json_last_error_msg() . "<br/>";
+				return false;
+			}
 
 			foreach( $invlist as $inv )
 				if( $inv->link == $this->link ) return false;
-
-			fclose( $file );
 		}
 
 		///- Dodaje nowy wpis do pliku danych (lub tworzy go)
-		$file = fopen( "data/invitation-list.json", "w" ) or die("Nie mozna otworzyc pliku do zapisu.");
+		$file = fopen( "data/invitation-list-2.json", "x" ) or die("Nie mozna otworzyc pliku do zapisu.");
 
 		if( $invlist == NULL ) $invlist = array( $this );
 		else array_push( $invlist, $this );
 
-		fwrite( $file, json_encode( $invlist ) );
+		$json = json_encode( $invlist, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE );
+
+		if( json_last_error() != JSON_ERROR_NONE ){
+			echo "Błąd zapisywania: " . json_last_error() . "<br/>" . json_last_error_msg() . "<br/>";
+			fclose( $file );
+			unlink( "data/invitation-list-2.json" );
+			return false;
+		}
+		else
+			fwrite( $file, $json );
 
 		fclose( $file );
+
+		rename( "data/invitation-list-2.json", "data/invitation-list.json" );
 
 		//fixme Zdażyło się, że skrypt usunął bazę danych...
 		return true;
@@ -162,7 +182,7 @@ class Invitation {
 
 		fclose( $file );
 		///- Zwraca tabelę zaproszeń z pliku
-		return json_decode( $json );
+		return json_decode( utf8_encode($json) );
 	}
 
 };

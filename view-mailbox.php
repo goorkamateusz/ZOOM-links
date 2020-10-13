@@ -45,6 +45,7 @@
 	if( ! empty( $emails ) ){
 
 		echo "Przetworzono " . count( $emails ) . " wiadomości.<br/>";
+		$correct = 0;
 
 		foreach( $emails as $email ){
 
@@ -74,9 +75,13 @@
 				echo "<p>" . $message . "</p>";
 				echo "<br/>";
 
+				$correct += 1;
+
 				//idea przycisk do usuwania wiadomości (na pewno, bezpieczeństwo, inne osoby?)
 			}
 		}
+
+		echo "Poprawnych $correct z " . count( $emails ) . " wiadomości.<br/>";
 	}
 	else
 		echo "Pusta skrzynka.<br/>";
