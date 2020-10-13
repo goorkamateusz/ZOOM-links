@@ -16,11 +16,13 @@ class Invitation {
 
 	/**
 	 * \brief Przetwarza tekst wiadomości lub konwertuje z stdClass na class Invitation.
-	 * \param[in] message - treść wiadomości
+	 * \param[in] $message - treść wiadomości
 	 *
 	 * Rozpatruje jedynie linki z domeny pwr-edu.zoom.us
 	 */
 	function __construct( $message ){
+
+		//todo przeniesc wzorce do config
 
 		/// 1. Przetwarza treść wiadomości
 		if( gettype($message) == "string" ){
@@ -119,17 +121,18 @@ class Invitation {
 
 		$invlist = NULL;
 
-		/// Czy plik istnieje, jesli nie tworzy go
+		/// - Jeśli plik istnieje wczytuje dane
 		if( file_exists( "data/invitation-list.json" ) ){
 
-			/// Jeśli plik danych istnieje, sprawdzamy czy link jest już na liście
-			$file = fopen( "data/invitation-list.json", "r" );
+			// otwiera i wczytuje plik
+			$file = fopen( "data/invitation-list.json", "r" ) or die("Błąd otwierania pliku do odczytu!");
 
 			$json = '';
 			while( ! feof( $file ) ) $json .= fgets( $file );
 
 			fclose( $file );
 
+			// dekoduje z JSON'a do tabeli
 			$invlist = json_decode( utf8_encode($json) );
 
 			if( json_last_error() != JSON_ERROR_NONE ){
@@ -141,9 +144,10 @@ class Invitation {
 				if( $inv->link == $this->link ) return false;
 		}
 
-		///- Dodaje nowy wpis do pliku danych (lub tworzy go)
-		$file = fopen( "data/invitation-list-2.json", "x" ) or die("Nie mozna otworzyc pliku do zapisu.");
+		///- Tworzy nowy plik danych
+		$file = fopen( "data/invitation-list-2.json", "x" ) or die("Nie mozna otworzyc pliku do zapisu. Prawdopodobnie nie został usunięty.");
 
+		/// Do istniejących dopisuje nowe dane
 		if( $invlist == NULL ) $invlist = array( $this );
 		else array_push( $invlist, $this );
 
@@ -160,9 +164,9 @@ class Invitation {
 
 		fclose( $file );
 
+		///- Nadpisuje stary plik danych nowym
 		rename( "data/invitation-list-2.json", "data/invitation-list.json" );
 
-		//fixme Zdażyło się, że skrypt usunął bazę danych...
 		return true;
 	}
 

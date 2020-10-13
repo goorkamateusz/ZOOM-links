@@ -13,16 +13,17 @@
 
     <main>
     <?php
-        //todo interface do link do view-... i check-... (jeśli nie usuwa)
 
         include( "class/Invitation.php" );
 
         ///- Pobiera i sortuje listę zaproszeń
         $invArr = Invitation::load();
 
+        // Konweruje z stdClass na Invitation class
         function conv($a){ return new Invitation($a); }
         $invArr = array_map( 'conv', $invArr );
 
+        // Sortuje
         usort(
             $invArr,
             function( $a, $b ){
@@ -52,11 +53,8 @@
 
             <div class="invite <?php echo $class; ?>">
 
-                <?php
-                    echo $inv->html();
+                <?php echo $inv->html(); ?>
 
-                    //todo front-end
-                ?>
             </div>
 
         <?php endforeach;

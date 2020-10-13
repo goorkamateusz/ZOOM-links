@@ -18,7 +18,7 @@
 	// Dołącza dane konfiguracyjne
 	include("config.php");
 
-	///- Próbuje połączyć się ze skrzynką
+	/// Próbuje połączyć się ze skrzynką
 	$imapResource = imap_open( MAIL_MAILBOX, MAIL_ADDRESS, MAIL_PASSWORD );
 
 	/// Jeśli błąd wyrzuca wyjątek z błędem połączenia.
@@ -32,18 +32,20 @@
 	 * 2. Filtruje, czyta wiadomości
 	 */
 
-	///- Filtr przeszukiwania wiadomości, rozpatruje tylko wiadomości z ostatniego tygodnia
-	$search = 'SINCE "' . date("j F Y", strtotime("-7 days")) . '"';
+	/// Filtr przeszukiwania wiadomości, rozpatruje tylko wiadomości z ostatniego tygodnia
+	$search = 'SINCE "' . date("j F Y", strtotime("-". LAST_DAYS ." days")) . '"';
 
-	// Ładuje przefiltrowane wiadmości
+	/// Ładuje przefiltrowane wiadmości
 	$emails = imap_search( $imapResource, $search );
 
 	///- Czyta wiadomości i próbuje stworzyć zaproszenia
 	include("class/Invitation.php");
 
+	$cnt_correct = 0; 		///< Licznik poprawnych
+	$cnt_saved = 0;			///< Licznik zapisanych
+
 	if( ! empty( $emails ) ){
 
-		//todo przeczytano
 		// Komunikat o ilości przetowrzonych wiadomości
 		echo "Przeczytano " . count( $emails ) . " wiadomości.<br/>";
 
@@ -54,7 +56,7 @@
 			$overview = $overview[0];
 
 			// Filtr nagłówka
-			if( preg_match( '~(pwr.edu.pl)+~', $overview->from ) == 0 )
+			if( preg_match( FILTR_ADRESAT, $overview->from ) == 0 )
 				continue;
 
 			// Przetwarza treść wiadomości
@@ -64,14 +66,19 @@
 			// Próbuje stworzyć zaproszenie
 			$invitation = new Invitation( $message );
 
-			//todo licznik potworzeń / odrzuconych
+
 			if( $invitation->isOK() ){
+				///- inkrementuje licznik poprawnych
+				$cnt_correct++;
 
 				/**
 				 * 3. Zapisuje wiadomości do pliku danych
 				 */
 				if( $invitation->save() ){
+					///- inkrementuje licznik zapisanych
+					$cnt_saved++;
 
+					///- Wyświetla zapisaną wiadomość
 					echo "Zapisano nowe spotkanie do pliku.<br/>";
 					$invitation->display();
 				}
@@ -84,9 +91,12 @@
 			}
 		}
 	}
-	// Komunikat o pustej skrzynce
+	///- Komunikat o pustej skrzynce
 	else
 		echo "Pusta skrzynka.<br/>";
+
+	///- Komunikat o zapisanych i poprawnych zaproszeniach
+	echo "Zapisano $cnt_saved z $cnt_correct porawnych zaproszeń.</>";
 
 	/// 5. Zamyka skrzynkę
 	imap_expunge( $imapResource );

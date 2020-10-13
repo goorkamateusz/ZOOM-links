@@ -44,7 +44,7 @@ TODO - Skrypt domyślnie usuwa przetworzone wiadomości ze skrzynki mailowej (mo
 TODO
 
 ## Funkcjonalności
-TODO
+Aplikacja przegląda 
 
 ## Wyjątki
 - Brak dostępu do odczytu lub zapisu pliku `data/invitation-list.json`;

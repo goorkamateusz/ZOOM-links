@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
    <meta charset="utf-8">
-   <title>ZOOM-links-update</title>
+   <title>ZOOM-links-view</title>
    <meta name="Author" content="Gorka Mateusz">
    <meta name="robots" content="noindex,nofollow">
    <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,7 +33,7 @@
 	 */
 
 	/// Filtr przeszukiwania wiadomości
-	$search = 'SINCE "' . date("j F Y", strtotime("-7 days")) . '"';
+	$search = 'SINCE "' . date("j F Y", strtotime("-".LAST_DAYS." days")) . '"';
 
 	///- Ładuje przefiltrowane wiadmości
 	$emails = imap_search( $imapResource, $search );
@@ -54,7 +54,7 @@
 			$overview = $overview[0];
 
 			// Filtr nagłówka
-			if( preg_match( '~(pwr.edu.pl)+~', $overview->from ) == 0 )
+			if( preg_match( FILTR_ADRESAT, $overview->from ) == 0 )
 				continue;
 
 			// Przetwarza treść wiadomości

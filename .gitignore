@@ -5,13 +5,14 @@ send.sh
 
 # Private files
 .ht**
-401.html
+config.php
 
 # Plugins output
 linecounter.*
 
 # Others file
 *.zip
+*.7z
 *~
 **.log
 
@@ -19,6 +20,7 @@ linecounter.*
 **/_tmp**
 **/_local**
 **.temp.**
+dox/html
 
 # Input, output data
 data/*
