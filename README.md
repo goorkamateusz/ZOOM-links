@@ -30,9 +30,13 @@ Kod aplikacji ZOOM-links, której zadaniem jest gromadzenie linków do spotkań 
 
 np. poprzez dodanie rekordu w `crontab -e`:
 ```
-*/30 * * * * /ścieżka_do_pliku/update.sh
+*/30 * * * * /ścieżka_do_pliku/init/update.sh
 ```
-oraz poprawne skonfigurowanie `ADRES_SERWERA` w skrypcie `update.sh`.
+
+Skrypt `init/update.sh`:
+```
+php ../check-mailbox.php > ../last_update_output.html
+```
 
 ### Wykorzystanie
 Podgląd listy zgromadzonych zaproszeń dostępny jest w skrypcie `index.php`.
