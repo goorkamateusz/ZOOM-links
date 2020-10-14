@@ -70,6 +70,7 @@
 				 * 3. Wyświetla zaproszenia
 				 */
 				echo "<hr/>";
+				echo $overview->from . "<br/>"; //temp
 				$invitation->display();
 				echo "<br/>";
 				echo "<p>" . $message . "</p>";

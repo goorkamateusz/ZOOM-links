@@ -38,13 +38,13 @@ oraz poprawne skonfigurowanie `ADRES_SERWERA` w skrypcie `update.sh`.
 Podgląd listy zgromadzonych zaproszeń dostępny jest w skrypcie `index.php`.
 
 ## Uwaga
-TODO - Skrypt domyślnie usuwa przetworzone wiadomości ze skrzynki mailowej (możliwość konfiguracji w `config.php`).
+- Skrypt domyślnie usuwa przetworzone wiadomości ze skrzynki mailowej (możliwość konfiguracji w `config.php`).
 
 ## Dokumentacja
 TODO
 
 ## Funkcjonalności
-Aplikacja przegląda 
+Aplikacja przegląda
 
 ## Wyjątki
 - Brak dostępu do odczytu lub zapisu pliku `data/invitation-list.json`;
@@ -56,6 +56,7 @@ Aplikacja przegląda
 
 ## TODO
 - [ ] Tekstowe dodawanie zaproszeń. (inna treść, okno tekstowe copy-paste)
+- [ ] Wysyłanie na discorda
 
 
 

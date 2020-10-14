@@ -16,12 +16,14 @@ class Invitation {
 
 	/**
 	 * \brief Przetwarza tekst wiadomości lub konwertuje z stdClass na class Invitation.
-	 * \param[in] $message - treść wiadomości
+	 * \param[in] $message  - treść wiadomości
+	 * \param[in] $overview - informacje na temat wiadomości
 	 *
-	 * Rozpatruje jedynie linki z domeny pwr-edu.zoom.us
 	 */
-	function __construct( $message ){
+	public function __construct( $message, $overview = NULL ){
 
+		//todo Rozpatruje jedynie linki z domeny pwr-edu.zoom.us
+		//todo mozliwość odczytu wielu domen (const w config.php, rozdzielone | i explode())
 		//todo przeniesc wzorce do config
 
 		/// 1. Przetwarza treść wiadomości
@@ -32,12 +34,14 @@ class Invitation {
 			preg_match( $pattern, $message, $matches );
 			$this->link = urlencode( $matches[0] );
 
-			///- Znajduje imie nazwisko prowadzącego
+			///- Znajduje imie nazwisko prowadzącego z treści wiadomości
 			$pattern = '~(CN="){1}.*("){1}~';
 			preg_match( $pattern, $message, $matches );
 			$this->lecturer = str_replace( ["CN=\"","\""], ['',''], $matches[0] );
 
-			//todo odczytywanie prowadzącego z adresu mail, jeśli nie ma CN
+			///- Odczytywanie imienia i nazwiska z pola "from"
+			if( $this->lectuere == "" && $overview != NULL )
+				$this->lecturer = $overview->from;
 
 			///- Znajduje haslo do spotkania
 			$pattern = '~(Password: )\S+~';
@@ -63,18 +67,20 @@ class Invitation {
 			$this->date = new DateTime( $this->date_ang );
 
 		}
-		/// 2. Lub konwertuje z stdClass na Invitation
-		else {
-			foreach( $message as $key => $val ) $this->{$key} = $val;
+		/// 2. lub konwertuje z stdClass na klasę Invitation
+		else{
+			$this->convert( $message );
 		}
+
 	}
 
 	/**
-	 * \brief
+	 * \brief Przekształca stdClass na klasę Invitation
+	 * \param[in] $std - klasa w formacie stdClass
 	 */
-	//todo Konstruktor biorący pod uwagę nagłówek wiadomości
-
-
+	public function convert( $std ){
+		foreach( $std as $key => $val ) $this->{$key} = $val;
+	}
 
 	/**
 	 * \brief Wyświetla podgląd danych zaproszenia

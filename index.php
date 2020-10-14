@@ -33,10 +33,11 @@
         );
 
         ///- Wyświetla wszystkie zaproszenia
-        foreach( $invArr as $std ):
+        // foreach( $invArr as $std ): //testme
+        foreach( $invArr as $inv ):
         ?>
             <?php
-                $inv = new Invitation( $std );
+                // $inv = new Invitation( $std ); //testme zbledna linijka, konversja w lini 23-24
 
                 // Ustawienie klasy: dzisiaj, mineło, przyszłość
                 $class = "future";
