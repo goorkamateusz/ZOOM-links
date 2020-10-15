@@ -61,6 +61,9 @@ Aplikacja przegląda
 ## TODO
 - [ ] Tekstowe dodawanie zaproszeń. (inna treść, okno tekstowe copy-paste)
 - [ ] Wysyłanie na discorda
+- [ ] Wyświetla dzień tygodnia
+- [ ] Wyświetla datę wygenerowania check-mailbox.php
+- [ ] Interface w index.php ()
 
 
 

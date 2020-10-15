@@ -89,3 +89,20 @@ body, html, div, a, p {
 a[href] {
 	color: blue;
 }
+
+/* Menu */
+.menu {
+	margin:10px 0px;
+}
+.switch {
+	max-width:220px;
+	min-width:160px;
+	display:flex;
+	flex-direction:row;
+	vertical-align:center;
+	justify-items: flex-start;
+}
+.switch * {
+	display:flex;
+	margin:auto;
+}
