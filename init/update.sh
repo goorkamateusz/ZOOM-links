@@ -1,5 +1,6 @@
 #!/bin/sh
 
-$path="`dirname $0`"
+cd `dirname "$0"`
+cd ..
 
-php "$path/../check-mailbox.php" > "$path/../last_update_output.html"
+php check-mailbox.php > last_update.html

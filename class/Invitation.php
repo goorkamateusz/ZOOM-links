@@ -151,7 +151,7 @@ class Invitation {
 		}
 
 		///- Tworzy nowy plik danych
-		$file = fopen( "data/invitation-list-2.json", "x" ) or die("Nie mozna otworzyc pliku do zapisu. Prawdopodobnie nie został usunięty.");
+		$file = fopen( "data/invitation-list-write.json", "x" ) or die("Nie mozna otworzyc pliku do zapisu. Prawdopodobnie nie został usunięty.");
 
 		/// Do istniejących dopisuje nowe dane
 		if( $invlist == NULL ) $invlist = array( $this );
@@ -162,7 +162,7 @@ class Invitation {
 		if( json_last_error() != JSON_ERROR_NONE ){
 			echo "Błąd zapisywania: " . json_last_error() . "<br/>" . json_last_error_msg() . "<br/>";
 			fclose( $file );
-			unlink( "data/invitation-list-2.json" );
+			unlink( "data/invitation-list-write.json" );
 			return false;
 		}
 		else
@@ -171,7 +171,7 @@ class Invitation {
 		fclose( $file );
 
 		///- Nadpisuje stary plik danych nowym
-		rename( "data/invitation-list-2.json", "data/invitation-list.json" );
+		rename( "data/invitation-list-write.json", "data/invitation-list.json" );
 
 		return true;
 	}
