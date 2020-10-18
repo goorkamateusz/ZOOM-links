@@ -12,6 +12,11 @@
 
 <?php
 	/**
+	 * Dodanie czasu wygenerowania pliku
+	 */
+	echo "<b>" . date("Y-m-d l h:i") . "</b><br/>";
+
+	/**
 	 * 1. Próbuje zalogować się do skrzynki mailowej
 	 */
 

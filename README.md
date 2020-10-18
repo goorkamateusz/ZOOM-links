@@ -77,9 +77,10 @@ Aplikacja przegląda
 ## TODO List
 - [ ] Tekstowe dodawanie zaproszeń. (inna treść, okno tekstowe copy-paste)
 - [ ] Wysyłanie na discorda
-- [ ] Wyświetla dzień tygodnia
-- [ ] Wyświetla datę wygenerowania check-mailbox.php
+- [x] Wyświetla dzień tygodnia
+- [x] Wyświetla datę wygenerowania check-mailbox.php
 - [ ] Interface w index.php ()
+- [ ] Usuwanie minionych z pliku .json
 
 ## Licencja
 Zobacz w pliku [LICENSE.md](LICENSE.md).

@@ -1,6 +1,9 @@
 <?php
 header('Content-type: text/html; charset=utf-8');
 
+/// Tablica nazw dni tygodnia po polsku według ISO-8601 (poniedziałek - 1, niedziela - 7)
+define( "WEEK_DAY_NAME", [ "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" ] );
+
 /**
  * \class Invitation
  * \brief Nadzoruje danymi zaproszenia
@@ -22,15 +25,14 @@ class Invitation {
 	 */
 	public function __construct( $message, $overview = NULL ){
 
-		//todo Rozpatruje jedynie linki z domeny pwr-edu.zoom.us
+		//todo Rozpatruje jedynie linki z jednej domeny
 		//todo mozliwość odczytu wielu domen (const w config.php, rozdzielone | i explode())
-		//todo przeniesc wzorce do config
 
 		/// 1. Przetwarza treść wiadomości
 		if( gettype($message) == "string" ){
 
 			///- Znajduje link do spotkania
-			$pattern = '~[a-z]+://pwr-edu.zoom.us\S+~';
+			$pattern = '~[a-z]+://' . ZOOM_ADDRESS_DOMAIN . '\S+~';
 			preg_match( $pattern, $message, $matches );
 			$this->link = urlencode( $matches[0] );
 
@@ -98,7 +100,7 @@ class Invitation {
 	 */
 	public function html(){
 		return	 "<div>"
-					."<a class=\"date\">$this->date_pl</a>"
+					."<a class=\"date\">$this->date_pl (". WEEK_DAY_NAME[ (int) date("N",  strtotime($this->date->date) ) ] . ")</a>"
 					."<a class=\"title\">$this->title</a>"
 				."</div>"
 				."<span>Prowadzący: <a class=\"lect\">$this->lecturer</a></span>"
