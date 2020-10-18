@@ -22,7 +22,7 @@ Kod aplikacji ZOOM-links, której zadaniem jest gromadzenie linków do spotkań 
 	- [Funkcjonalności](#funkcjonalności)
 	- [Wyjątki](#wyjątki)
 	- [Specyfikacja](#specyfikacja)
-	- [TODO List](#todo-list)
+	- [Do dalszego rozwoju:](#do-dalszego-rozwoju)
 	- [Licencja](#licencja)
 
 ## Uruchomienie
@@ -74,13 +74,13 @@ Aplikacja przegląda
 - Język: PHP, JS, CSS, HTML;
 - Preferowany system Linux (obsługa skryptów bash i modyfikacja praw dostępu przez `chmod`);
 
-## TODO List
+## Do dalszego rozwoju:
 - [ ] Tekstowe dodawanie zaproszeń. (inna treść, okno tekstowe copy-paste)
 - [ ] Wysyłanie na discorda
 - [x] Wyświetla dzień tygodnia
 - [x] Wyświetla datę wygenerowania check-mailbox.php
 - [ ] Interface w index.php ()
-- [ ] Usuwanie minionych z pliku .json
+- [ ] Usuwanie minionych z plików .json
 
 ## Licencja
 Zobacz w pliku [LICENSE.md](LICENSE.md).
