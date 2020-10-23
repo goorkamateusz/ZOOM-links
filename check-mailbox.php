@@ -83,6 +83,9 @@
 					///- inkrementuje licznik zapisanych
 					$cnt_saved++;
 
+					///- wysyłanie wiadomości na kanał discorda
+					
+
 					///- Wyświetla zapisaną wiadomość
 					echo "Zapisano nowe spotkanie do pliku.<br/>";
 					$invitation->display();
