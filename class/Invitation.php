@@ -4,8 +4,6 @@ header('Content-type: text/html; charset=utf-8');
 /// Tablica nazw dni tygodnia po polsku według ISO-8601 (poniedziałek - 1, niedziela - 7)
 define( "WEEK_DAY_NAME", [ "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" ] );
 
-//todo date_ang jest zbędne, usunąć zachowując kompatybilność! (lub zaaktualizować json)
-
 /**
  * \class Invitation
  * \brief Nadzoruje danymi zaproszenia
@@ -16,7 +14,7 @@ class Invitation {
 	public $title;		///< Tytuł spotkania
 	public $lecturer;	///< Prowadzący
 	public $date_pl; 	///< Data spotkania po polsku
-	public $date_ang;	///< Data spotkania po angielsku
+	// public $date_ang;	// Data spotkania po angielsku. [Usunięto po e51af85]
 	public $date;		///< Data spotkania w typie DateTime
 
 	/**
@@ -65,10 +63,10 @@ class Invitation {
 			///- Znajduje datę spotkania (po angielsku)
 			$pattern = '~(scheduled on ).*(will be held)+~';
 			preg_match( $pattern, $message, $matches );
-			$this->date_ang = str_replace( ["scheduled on "," will be held"], ['',''], $matches[0] ); //todo date_ang
+			$date_ang = str_replace( ["scheduled on "," will be held"], ['',''], $matches[0] );
 
 			///- Tworzy datę spotkania w type danych DataTime
-			$this->date = new DateTime( $this->date_ang );
+			$this->date = new DateTime( $date_ang );
 
 		}
 		/// 2. lub konwertuje z stdClass na klasę Invitation
