@@ -42,8 +42,14 @@ class Invitation {
 			$this->lecturer = str_replace( ["CN=\"","\""], ['',''], $matches[0] );
 
 			///- Odczytywanie imienia i nazwiska z pola "from"
-			if( $this->lectuere == "" && $overview != NULL )
-				$this->lecturer = $overview->from;
+			if( $this->lectuere == "" && $overview != NULL ){
+
+				// Usuwanie adresu email z nadawcy wiadomości
+				$pattern = "~( <).*(>)~";
+				preg_match( $pattern, $overview->from, $matches );
+
+				$this->lecturer = str_replace( $matches[0], "", $overview->from );
+			}
 
 			///- Znajduje haslo do spotkania
 			$pattern = '~(Password: )\S+~';
