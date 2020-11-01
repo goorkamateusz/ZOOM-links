@@ -119,7 +119,7 @@ class Invitation {
 	 * \return html
 	 */
 	public function message(){
-		return	 "| ". date("Y-m-d")
+		return	 "| ". date("Y-m-d", strtotime($this->date->date))
 				." | **". WEEK_DAY_NAME[ (int) date("N",  strtotime($this->date->date) )-1 ] ." ".  date("H:i",strtotime($this->date->date)) ."** | "
 				. $this->title . "\n"
 				. "Link: **" . utf8_encode(urldecode($this->link)) . "**\n"
