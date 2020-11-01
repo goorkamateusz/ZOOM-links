@@ -115,6 +115,18 @@ class Invitation {
 	}
 
 	/**
+	 * \brief Zwraca wiadomosc z zaproszeniem
+	 * \return html
+	 */
+	public function message(){
+		return	 "| ". date("Y-m-d")
+				." | **". WEEK_DAY_NAME[ (int) date("N",  strtotime($this->date->date) )-1 ] ." ".  date("H:i",strtotime($this->date->date)) ."** | "
+				. $this->title . "\n"
+				. "Link: **" . utf8_encode(urldecode($this->link)) . "**\n"
+				. "Hasło: **". $this->password ."**";
+	}
+
+	/**
 	 * \brief Zwraca informację, czy zaproszenie jest kompletne.
 	 * \retval true  - Zaproszenie zawiera link
 	 * \retval false - Zaproszenie nie jest kompletne

@@ -1,7 +1,8 @@
 <?php
-/**
- * \file config.php
- * \brief Plik konfiguracyjny.
+/*
+ * UWAGA: Plik nie śledzony w repozytorium!
+ * aby włączyć śledzenie:
+ * git update-index --no-assume-unchanged config.php
  */
 
 ////----------------------------------------------------------------
@@ -31,12 +32,23 @@ define( "FILTR_ADRESAT", "~(pwr.edu.pl)+~" );
  */
 define( "LAST_DAYS", "7" );
 
+/**
+ * Domena adresów zoom
+ */
+define( "ZOOM_ADDRESS_DOMAIN", "pwr-edu.zoom.us" );
+
 ////----------------------------------------------------------------
 /**
  * Czy usuwać wiadomości z zaproszeniami po ich przetworzeniu.
  */
-define( "REMOVE_MAIL", false );
 // define( "REMOVE_MAIL", true );
+define( "REMOVE_MAIL", false );
 
+////----------------------------------------------------------------
+/**
+ * Domyślny kanał na discordzie.
+ * Pusty string "", jeśli nie chcemy wysyłać wiadmości na domyślny kanał.
+ */
+define( "DISCORD_DEFAULT", "" );
 
 ?>
