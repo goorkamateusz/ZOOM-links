@@ -2,7 +2,7 @@
 import json
 from datetime import datetime
 
-# todo spotkania ktore sa co tydzien
+# idea: Kodowaie inaczej spotkan, ktore sa co tydzien
 
 # ---------------------------------------------------------
 # Klasa spotkania
@@ -12,14 +12,14 @@ class Lecturer :
 	disc = '' 					# webhook do kanalu
 
 	# konstruktor
-	def __init__( self, le, disc = '' ):
+	def __init__( self, le, disc ):
 		self.term = []
 		self.lect = le
 		self.disc = disc
 
 	# do stringa
 	def __str__( self ):
-		return '{  "lect":"'+self.lect+'",\n   "term":[\n     ' + ",\n     ".join( map(str,self.term) ) + '\n    ],\n   "disc":""\n}'
+		return '{  "lect":"'+self.lect+'",\n   "term":[\n     ' + ",\n     ".join( map(str,self.term) ) + '\n    ],\n   "disc":"' + self.disc + '"\n}'
 
 	# Czy rowne
 	def __eq__( self, st ):
@@ -57,7 +57,7 @@ class Term :
 
 	# do stringa
 	def __str__( self ):
-		return '{"hour":"' + self.hour + '" ,"day":"' + str(self.day) + '", "week":"' + self.week + '", "disc":""}'
+		return '{"hour":"' + self.hour + '" ,"day":"' + str(self.day) + '", "week":"' + self.week + '", "disc":"' + self.disc + '"}'
 
 	# czy rowne
 	def __eq__( self, oth ):
@@ -98,7 +98,7 @@ for lect_json in discord_json :
 for inv in invitations :
 
 	if inv["lecturer"] not in discord :
-		l = Lecturer( inv["lecturer"] )
+		l = Lecturer( inv["lecturer"], '' )
 		l.term.append( Term( inv["date"]["date"] ) )
 
 		discord.append( l )
