@@ -42,15 +42,15 @@ Aplikacja ZOOM-links, której zadaniem jest gromadzenie linków do spotkań w se
 	...
 ```
 2. Umieścić aplikację na komputerze obsługującym wykonywanie skrytów PHP.
-3. Zadbać o odpowiednie ustawienie uprawnień plików i folderów, można posiłkować się skryptem: `init/init.sh`.
+3. Zadbać o odpowiednie ustawienie uprawnień plików i folderów, można posiłkować się skryptem: `admin/init.sh`.
 4. Dodać wykonywanie skryptu `check-mailbox.php` do wywołania w cyklicznego w CRON.
 
 Poprzez dodanie rekordu w `crontab -e`, które powoduje, że skrypt będzie wykonywane co 30min:
 ```
-*/30 * * * * /<ścieżka/do/pliku>/init/update.sh
+*/30 * * * * /<ścieżka/do/pliku>/admin/update.sh
 ```
 
-Warto wykorzystać skrypt `init/update.sh`:
+Warto wykorzystać skrypt `admin/update.sh`:
 ```
 cd `dirname "$0"`
 cd ..
