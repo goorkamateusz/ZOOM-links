@@ -49,6 +49,11 @@
 	$cnt_correct = 0; 		///< Licznik poprawnych
 	$cnt_saved = 0;			///< Licznik zapisanych
 
+	///- Przygotowanie do wysyłania wiadomości z powiadomieniami
+	include("class/SendOn.php");
+
+	$sendmgr = new SendOn();	///< Zarządca wiadomości
+
 	if( ! empty( $emails ) ){
 
 		// Komunikat o ilości przetowrzonych wiadomości
@@ -82,6 +87,9 @@
 				if( $invitation->save() ){
 					///- inkrementuje licznik zapisanych
 					$cnt_saved++;
+
+					///- wysyłanie wiadomości na kanał discorda
+					$sendmgr->send( $invitation );
 
 					///- Wyświetla zapisaną wiadomość
 					echo "Zapisano nowe spotkanie do pliku.<br/>";

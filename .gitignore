@@ -6,6 +6,7 @@ send.sh
 # Private files
 .ht**
 config.php
+discord-channel.json
 
 # Plugins output
 linecounter.*
