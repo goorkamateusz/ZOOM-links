@@ -1,7 +1,7 @@
 <?php
-/*
+/**
  * UWAGA: Plik nie śledzony w repozytorium!
- * aby włączyć śledzenie:
+ * aby wyłączyć:
  * git update-index --no-assume-unchanged config.php
  */
 
@@ -47,7 +47,6 @@ define( "REMOVE_MAIL", false );
 ////----------------------------------------------------------------
 /**
  * Domyślny kanał na discordzie.
- * Pusty string "", jeśli nie chcemy wysyłać wiadmości na domyślny kanał.
  */
 define( "DISCORD_DEFAULT", "" );
 
