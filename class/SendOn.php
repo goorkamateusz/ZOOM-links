@@ -71,7 +71,7 @@ class SendOn {
 
 			}
 			catch( Exception $e ) {
-				echo "Błąd disdord:<br><b>$e</b><br>";
+				echo "Błąd Diskord:<br><b>$e</b><br>";
 			}
 		}
 		else {
@@ -119,13 +119,20 @@ class SendOn {
 		foreach( $this->discord_channels as $lect )
 			if( $lect->lect == $invitation->lecturer ){
 
-				//todo jeden kanał dla kazdego ze spotkan prowadzacego
-
+				// Sprawdza wszystkie terminy prowadzacych
 				foreach( $lect->term as $term )
 					if( $this->same_term( $term, $invitation->date->date ) ){
-						return $term->disc == "" ? null : $term->disc;
+						if( $term->disc != "" )
+							return $term->disc;
+						else
+							// Sprawdza czy jest glowny kanal prowadzacego, jesli istnieje termin, ale nie ma linku
+							return ( $lect->disc == "" )? null : $lect->disc;
 					}
+
+				// Sprawdza czy jest glowny kanal prowadzacego (jśli nie znalazł termin w $lect->term)
+				if( $lect->disc != "" ) return $lect->disc;
 			}
+
 		return null;
 	}
 
