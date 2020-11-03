@@ -149,20 +149,12 @@ class Invitation {
 
 		/// - Jeśli plik istnieje wczytuje dane
 		if( file_exists( "data/invitation-list.json" ) ){
-
-			// otwiera i wczytuje plik
-			$file = fopen( "data/invitation-list.json", "r" ) or die("Błąd otwierania pliku do odczytu!");
-
-			$json = '';
-			while( ! feof( $file ) ) $json .= fgets( $file );
-
-			fclose( $file );
-
-			// dekoduje z JSON'a do tabeli
-			$invlist = json_decode( utf8_encode($json) );
-
-			if( json_last_error() != JSON_ERROR_NONE ){
-				echo "Błąd czytania: " . json_last_error() . "<br/>" . json_last_error_msg() . "<br/>";
+			try {
+				// otwiera i wczytuje plik
+				$invlist = Invitation::load();
+			}
+			catch( Exception $e ){
+				echo $e;
 				return false;
 			}
 
@@ -170,19 +162,55 @@ class Invitation {
 				if( $inv->link == $this->link ) return false;
 		}
 
-		///- Tworzy nowy plik danych
-		$file = fopen( "data/invitation-list-write.json", "x" ) or die("Nie mozna otworzyc pliku do zapisu. Prawdopodobnie nie został usunięty.");
-
-		/// Do istniejących dopisuje nowe dane
+		///- Do istniejących dopisuje nowe dane
 		if( $invlist == NULL ) $invlist = array( $this );
 		else array_push( $invlist, $this );
 
+		///- Zapisuje do pliku
+		return Invitation::save_to_file( $invlist );
+	}
+
+	/**
+	 * \brief Usuwa nieodwracalnie przedawnione spotkania.
+	 *
+	 * \warrning Usuwa nieodwracalnie dane z pliku!
+	 * \return Ilosc usunietych zaproszeń
+	 */
+	public static function remove_passed(){
+
+		if( REMOVE_PASSED ){
+			///- Pobiera dane z pliku
+			$invlist = Invitation::load();
+
+			///- Usuwa starsze zaproszenia
+			$removed = Invitation::remove_passed_from_array( $invlist );
+
+			///- Zapisuje przetworzone dane do pliku
+			if( Invitation::save_to_file( $invlist ) != true )
+				throw new Exception("Błąd zapisu do pliku");
+
+			return $removed;
+		}
+	}
+
+	/**
+	 * \biref Zapisuje do pliku tablicę z zaproszeniami
+	 * \post Nadpisuje plik invitation-list.json!
+	 * \retval true  - powodzenie
+	 * \retval false - niepowodzenie
+	 */
+	private static function save_to_file( $invlist ){
+
+		///- Tworzy nowy plik danych
+		$file = fopen( "data/invitation-list-write.json", "x" ) or die("Nie mozna otworzyc pliku do zapisu. Prawdopodobnie nie został usunięty.");
+
+		///- Dopisuje nowe dane do pliku
 		$json = json_encode( $invlist, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE );
 
 		if( json_last_error() != JSON_ERROR_NONE ){
 			echo "Błąd zapisywania: " . json_last_error() . "<br/>" . json_last_error_msg() . "<br/>";
 			fclose( $file );
-			unlink( "data/invitation-list-write.json" );
+			unlink( "data/invitation-list-write.json" ); // usuwa plik z awarią
 			return false;
 		}
 		else
@@ -197,22 +225,59 @@ class Invitation {
 	}
 
 	/**
+	 * \brief Usuwa przedawnione zaproszenia z tablicy.
+	 * Usuwa zaproszenia, których spotkania odbyły się dawniej niż LAST_DAYS.
+	 *
+	 * \param[in|out] & $invlist - referencja na tablice zaproszeń
+	 * \return Ilośc usuniętych zaproszeń z tablicy
+	 */
+	private static function remove_passed_from_array( & $invlist ){
+
+		// Starsze niz $staments usuwaj
+		$staments = strtotime("-". LAST_DAYS ." days");
+		// Licznik aktualnej pozycji
+		$current = 0;
+		// Licznik usunietych
+		$counter = 0;
+
+		foreach( $invlist as $inv ){
+			if( strtotime($inv->date->date) < $staments ){
+				// Usuwa przedawniony element z tablicy
+				array_splice( $invlist, $current, 1 );
+				++$counter;
+			}
+			else
+				++$current;
+		}
+
+		return $counter;
+	}
+
+	/**
 	 * \brief Pobiera z pliku danych zaproszenia.
 	 * \return Tablicę spotkań z pliku
 	 *
 	 * \exception
 	 * 	- Nie można otrzymać pliku do odczytu!
+	 *  - Błąd przetwarzania danych JSON.
 	 */
 	public static function load(){
 		///- Otwiera plik do odczytu i odczytuje JSON'a
-		$file = fopen( "data/invitation-list.json", "r" ) or die ("Nie można otworzyć pliku do odczytu!");
+		$file = @fopen( "data/invitation-list.json", "r" ) or die ("Nie można otworzyć pliku do odczytu!");
 
 		$json = "";
 		while( ! feof( $file ) ) $json .= fgets( $file );
 
 		fclose( $file );
+
+		///- Przetwarza plik json do tablicy obiektów
+		$json = json_decode( utf8_encode($json) );
+
+		if( json_last_error() != JSON_ERROR_NONE )
+			throw new Exception("Pobierane zaproszen z pliku: " . json_last_error_msg() );
+
 		///- Zwraca tabelę zaproszeń z pliku
-		return json_decode( utf8_encode($json) );
+		return $json;
 	}
 
 };

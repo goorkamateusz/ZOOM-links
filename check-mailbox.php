@@ -109,7 +109,11 @@
 		echo "Pusta skrzynka.<br/>";
 
 	///- Komunikat o zapisanych i poprawnych zaproszeniach
-	echo "Zapisano $cnt_saved z $cnt_correct porawnych zaproszeń.</>";
+	echo "Zapisano $cnt_saved z $cnt_correct porawnych zaproszeń.<br/>";
+
+	///- Usuwanie przedawnionych zaproszeń
+	if( $cnt_saved > 0 )
+		echo "Usunięto przedawnionych: " . Invitation::remove_passed() . "<br/>";
 
 	/// 5. Zamyka skrzynkę
 	imap_expunge( $imapResource );

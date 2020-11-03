@@ -2,7 +2,7 @@
 /**
  * UWAGA: Plik nie śledzony w repozytorium!
  * aby wyłączyć:
- * git update-index --no-assume-unchanged config.php
+ * git update-index --no-assume-changed config.php
  */
 
 ////----------------------------------------------------------------
@@ -39,14 +39,21 @@ define( "ZOOM_ADDRESS_DOMAIN", "pwr-edu.zoom.us" );
 
 ////----------------------------------------------------------------
 /**
- * Czy usuwać wiadomości z zaproszeniami po ich przetworzeniu.
+ * Czy usuwać wiadomości z zaproszeniami po ich przetworzeniu ze skrzynki mailowej.
+ * Domyślnie: false
  */
-// define( "REMOVE_MAIL", true );
 define( "REMOVE_MAIL", false );
+
+/**
+ * Czy usuwać zaproszenia z pliku danych po ich przedawnieniu.
+ * Domyślnie: true
+ */
+define( "REMOVE_PASSED", true );
 
 ////----------------------------------------------------------------
 /**
  * Domyślny kanał na discordzie.
+ * Pusty string - brak domyślnego kanału, zaproszenia poza filtrem są nigdzie wysyłane.
  */
 define( "DISCORD_DEFAULT", "" );
 

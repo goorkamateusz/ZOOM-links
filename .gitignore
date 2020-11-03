@@ -21,6 +21,7 @@ linecounter.*
 **/_tmp**
 **/_local**
 **.temp.**
+**.priv.**
 dox/html
 
 # Input, output data

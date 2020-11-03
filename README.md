@@ -93,7 +93,7 @@ Dokumentację można wygenerować poprzez polecenie `doxygen dox/Doxyfile `, wyk
 - [x] Wyświetla dzień tygodnia
 - [x] Wyświetla datę wygenerowania check-mailbox.php
 - [ ] Interface w index.php ()
-- [ ] Usuwanie minionych spotkań z plików .json
+- [x] Usuwanie minionych spotkań z plików .json
 - [ ] Przenoszenie maili do kosza, zamaist usuwania
 - [ ] Skrypt do testowania konfiguracji skrzynki
 
