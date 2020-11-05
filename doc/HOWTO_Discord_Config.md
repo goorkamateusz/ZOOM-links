@@ -74,7 +74,8 @@ Skrypt na podstawie już istniejących zaproszeń w `data/invitation-list.json` 
      {"hour":"11:15" ,"day":"5", "week":"P", "disc":"https://discord.com/...resztaadresu..."}
     ],
    "disc":""
-},
+}
+]
 ```
 
 Wróć do [README](../README.md)

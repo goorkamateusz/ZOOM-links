@@ -97,10 +97,32 @@
 				}
 
 				/**
-				 * 4. Usuwa wiadomość ze skrzynki (zależnie od konfiguracji)
+				 * 4. Postępowanie po przeczytaniu wiadomości
+				 * \see MAIL_DO_AFTER_READ
 				 */
-				if( REMOVE_MAIL )
-					imap_delete( $imapResource, $email );
+				switch( MAIL_DO_AFTER_READ ){
+					// Usuwa wiadomość pernamentie
+					case 2:
+						imap_delete( $imapResource, $email );
+						echo "Usunięto wiadomość<br/>";
+						break;
+
+					// Przenosi wiadomość do skrzynki
+					case 1:
+						if( ! imap_mail_move( $imapResource, "$email", MAIL_TARGET_FOLDER ) )
+							echo "Błąd przenoszenia wiadomości do skrzynki " . MAIL_TARGET_FOLDER . "<br/>";
+
+						echo "Przeniesiono wiadomosć do " . MAIL_TARGET_FOLDER . "<br/>";
+						break;
+
+					// Pozostawia bez zmian
+					case 0: break;
+
+					// Nie znana opcja
+					default: echo "Nie znana opcja MAIL_DO_AFTER_READ<br/>"; break;
+				}
+
+				echo "<hr>"; // linia horyzontalna po kazdej wiadomosci
 			}
 		}
 	}

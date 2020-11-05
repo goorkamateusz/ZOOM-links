@@ -1,5 +1,4 @@
 # ZOOM-links
-**Aplikacja do prywatnego użytku w fazie rozwoju i testów.**
 
 Aplikacja ZOOM-links, której zadaniem jest gromadzenie linków do spotkań w serwisie telekomunikacyjnym ZOOM ze wskazanej skrzynki mailowej.
 
@@ -27,23 +26,26 @@ Aplikacja ZOOM-links, której zadaniem jest gromadzenie linków do spotkań w se
 ## Funkcjonalności
 - Gromadzenie zaproszeń na spotkania na ZOOM'ie ze skrzynki mailowej;
 - Wysyłanie zaproszeń na wskazane kanały Discorda;
-- Usuwanie zaproszeń na spotkania na ZOOM ze skrzynki mailowej;
+- Usuwanie lub przenoszenie do folderu zaproszeń na spotkania na ZOOM ze skrzynki mailowej;
 
 
 ## Uruchomienie
 ### Przygotownie i uruchomienie
-1. Odpowiednio ustawić stałe w pliku konfiguracyjnym `config.php`.
+1. Odpowiednio ustawić stałe w pliku konfiguracyjnym [config.php](config.php).
+
+Koniecznymi do skonfigurowania są:
 ```
-	- adres serwera skrzynki mailowej;
-	- adres e-mail;
-	- hasło do skrzynki mailowej;
-	- maskę filtru adresata wiadomości;
-	- z ilu ostatnich dni przetwarzać wiadomości;
-	...
+	- Adres serwera skrzynki mailowej;
+	- Twój adres e-mail;
+	- Twoje hasło do skrzynki;
+	- Maska adresata wiadomości
+	- Domena adresów zoom
 ```
-2. Umieścić aplikację na komputerze obsługującym wykonywanie skrytów PHP.
-3. Zadbać o odpowiednie ustawienie uprawnień plików i folderów, można posiłkować się skryptem: `admin/init.sh`.
-4. Dodać wykonywanie skryptu `check-mailbox.php` do wywołania w cyklicznego w CRON.
+Wszystkie opisy znajdziesz w komentarzach pliku [config.php](config.php).
+
+1. Umieścić aplikację na komputerze obsługującym wykonywanie skrytów PHP.
+2. Zadbać o odpowiednie ustawienie uprawnień plików i folderów, można posiłkować się skryptem: `admin/init.sh`.
+3. Dodać wykonywanie skryptu [check-mailbox.php](check-mailbox.php) do wywołania w cyklicznego w CRON.
 
 Poprzez dodanie rekordu w `crontab -e`, które powoduje, że skrypt będzie wykonywane co 30min:
 ```
@@ -61,7 +63,7 @@ Aby ułatwić zadanie oraz mieć podgląd na wynik ostatniego wywołania.
 
 
 ### Wykorzystanie
-Podgląd listy zgromadzonych zaproszeń dostępny jest na stronie generowanej przez `index.php`.
+Podgląd listy zgromadzonych zaproszeń dostępny jest na stronie generowanej przez [index.php](index.php).
 
 
 ### Dodatkowe funkcjonalności
@@ -88,13 +90,13 @@ Dokumentację można wygenerować poprzez polecenie `doxygen dox/Doxyfile `, wyk
 
 
 ## Do dalszego rozwoju:
-- [ ] Tekstowe dodawanie zaproszeń. (inna treść, okno tekstowe copy-paste)
 - [x] Wysyłanie wiadomości na Discordzie
 - [x] Wyświetla dzień tygodnia
 - [x] Wyświetla datę wygenerowania check-mailbox.php
-- [ ] Interface w index.php ()
 - [x] Usuwanie minionych spotkań z plików .json
-- [ ] Przenoszenie maili do kosza, zamaist usuwania
+- [x] Przenoszenie maili do kosza, zamaist usuwania
+- [ ] Tekstowe dodawanie zaproszeń. (inna treść, okno tekstowe copy-paste)
+- [ ] Rozbudować interface w index.php
 - [ ] Skrypt do testowania konfiguracji skrzynki
 
 Całość listy ToDo do wygenerowania z komentarzy kodu.
