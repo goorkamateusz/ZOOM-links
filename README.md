@@ -97,7 +97,14 @@ Dokumentację można wygenerować poprzez polecenie `doxygen dox/Doxyfile `, wyk
 - [x] Przenoszenie maili do kosza, zamaist usuwania
 - [ ] Tekstowe dodawanie zaproszeń. (inna treść, okno tekstowe copy-paste)
 - [ ] Rozbudować interface w index.php
-- [ ] Skrypt do testowania konfiguracji skrzynki
+- [ ] Gromadzenie recent-from - przesłane od, aby analizować z której skrzynki przesłano wiadomości
+
+- [ ] Przycisk "wyślij ponownie" w index.php
+  - skrypt, który dostaje po GET link do zaproszenia i znajduje zaproszenie i wysyła na discorda
+
+- [ ] Usuwanie wiadomości zdublowanych (akcja dla zdublowanych)
+  - config.php DO_FOR_DUBLICAT ...  (?)
+  - if( $inv->save() ) {...} else: wywolanie_usuwania()
 
 Całość listy ToDo do wygenerowania z komentarzy kodu.
 

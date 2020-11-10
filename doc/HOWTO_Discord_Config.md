@@ -5,7 +5,7 @@ W pliku `config.php` istnieje możliwość skonfigurowania domyślnego kanału `
 
 - W przypadku, gdy dane zaproszenie nie spełnia żadnych z kryteriów w pliku `discord-channel.json` lub ten plik nie istnieje zostanie wysłane na domyślny kanał.
 - Jeżeli `DEFAULT_DISCORD` zdefiniujemy na `""`, pusty string, takie wiadomości nie będą wysyłane nigdzie.
-
+- Filtr pozwala na +/- 15min różnicy między `term`, a datą i czasem spotkania.
 
 ## Plik zawierający webhooki kanałów
 W głównym katalogu projektu musi być utworzony plik `discord-channel.json`.

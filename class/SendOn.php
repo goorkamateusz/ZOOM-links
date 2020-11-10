@@ -138,23 +138,29 @@ class SendOn {
 
 	/**
 	 * \brief Czy termin z date zawiera się w filtrze term?
+	 * Tolerancja +/- 15min,
+	 * \param $term - Termin filtru (z discord-channel.json)
+	 * \param $st 	- tekstowo data spotkania z zaproszenia
 	 * \retval true  - tak
 	 * \retval false - nie
 	 */
 	private function same_term( $term, $st ){
 
-		// Wczytanie daty ze stringu
+		// Wczytanie spotkania daty ze stringu
 		$date = mktime($st[11].$st[12], $st[14].$st[15], $st[17].$st[18], $st[5].$st[6], $st[8].$st[9], $st[0].$st[1].$st[2].$st[3] );
 
-		// echo "<br>$term->week, $term->day, $term->hour    ???     " . date("Y:m:d h:i",$date) . "    ->     ";
-		// echo  (int) date("N", $date ) 						!= $term->day  ? 'F' : 'T' ;
-		// echo  ( ((int) date("W", $date ) )%2 ? "N" : "P" )	!= $term->week ? 'F' : 'T' ;
-		// echo  date("H:i", $date ) 							!= $term->hour ? 'F' : 'T' ;
+		// Sprawdzenie warunków tygodnia i dnia
+		if( ( ((int) date("W", $date ) )%2 ? "N" : "P" )	!= $term->week ) return false;
+		if( (int) date("N", $date ) 						!= $term->day  ) return false;
 
-		// Sprawdzenie warunkow
-		if(  (int) date("N", $date ) 						!= $term->day  ) return false;
-		if(  ( ((int) date("W", $date ) )%2 ? "N" : "P" )	!= $term->week ) return false;
-		if(  date("H:i", $date ) 							!= $term->hour ) return false;
+		// Sprawdzenie warunków godziny (z tolerancją)
+		$term_hour = explode(":", $term->hour );
+		print_r( $term_hour );
+		if( date("H", $date ) 	!= $term_hour[0] 	) return false;
+
+		$date_min = (int) date("i", $date) ;
+		if( $date_min > (int) $term_hour[1] + 15  	) return false; 	//15 = 15min tolerancji
+		if( $date_min < (int) $term_hour[1] - 15 	) return false;
 
 		return true;
 	}
