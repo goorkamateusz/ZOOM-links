@@ -147,7 +147,8 @@ class SendOn {
 	private function same_term( $term, $st ){
 
 		// Wczytanie spotkania daty ze stringu
-		$date = mktime($st[11].$st[12], $st[14].$st[15], $st[17].$st[18], $st[5].$st[6], $st[8].$st[9], $st[0].$st[1].$st[2].$st[3] );
+		$date = mktime(	$st[11].$st[12], $st[14].$st[15], $st[17].$st[18],
+						$st[5].$st[6], $st[8].$st[9], $st[0].$st[1].$st[2].$st[3] );
 
 		// Sprawdzenie warunków tygodnia i dnia
 		if( ( ((int) date("W", $date ) )%2 ? "N" : "P" )	!= $term->week ) return false;
@@ -155,7 +156,6 @@ class SendOn {
 
 		// Sprawdzenie warunków godziny (z tolerancją)
 		$term_hour = explode(":", $term->hour );
-		print_r( $term_hour );
 		if( date("H", $date ) 	!= $term_hour[0] 	) return false;
 
 		$date_min = (int) date("i", $date) ;

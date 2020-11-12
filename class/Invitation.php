@@ -37,12 +37,20 @@ class Invitation {
 			$this->link = urlencode( $matches[0] );
 
 			///- Znajduje imie nazwisko prowadzącego z treści wiadomości
+			// Z prześlij dalej w załączniku
 			$pattern = '~(CN="){1}.*("){1}~';
 			preg_match( $pattern, $message, $matches );
 			$this->lecturer = str_replace( ["CN=\"","\""], ['',''], $matches[0] );
 
-			///- Odczytywanie imienia i nazwiska z pola "from"
-			if( $this->lectuere == "" && $overview != NULL ){
+			// Z prześlij dalej w treści wiadomości
+			if( $this->lecturer == "" ){
+				$pattern = '~(Od: ){1}.*( <).*(>){1}~';
+				preg_match( $pattern, $message, $matches );
+				$this->lecturer = str_replace( ["Od: "], [''], explode(" <",$matches[0])[0] );
+			}
+
+			// Wysłane poprzez filtr, z pola "from"
+			if( $this->lecturer == "" && $overview != NULL ){
 
 				// Usuwanie adresu email z nadawcy wiadomości
 				$pattern = "~( <).*(>)~";

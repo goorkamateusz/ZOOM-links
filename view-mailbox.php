@@ -67,7 +67,7 @@
 			$message = quoted_printable_decode( $message );
 
 			// Próbuje stworzyć zaproszenie
-			$invitation = new Invitation( $message );
+			$invitation = new Invitation( $message, $overview );
 
 			if( $invitation->isOK() ){
 
