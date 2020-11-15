@@ -1,3 +1,10 @@
+<?php
+/**
+ * \file check-mailbox.php
+ * \brief Sprawdza i przetwarza wiadomości ze skrzynki mailowej.
+ */
+?>
+
 <!doctype html>
 <html lang="pl">
 <head>
@@ -11,47 +18,23 @@
 </head>
 
 <?php
-	/**
-	 * Dodanie czasu wygenerowania pliku
-	 */
+	// Dodanie czasu wygenerowania pliku
 	echo "<b>" . date("Y-m-d l h:i") . "</b><br/>";
 
-	/**
-	 * 1. Próbuje zalogować się do skrzynki mailowej
-	 */
+	// Dołącza klasę obsługującą wiadomości
+	require "class/Mailbox.php";
 
-	// Dołącza dane konfiguracyjne
-	include("config.php");
+	///- 1. Próbuje zalogować się do skrzynki mailowej
+	$mailbox = new Mailbox();
 
-	/// Próbuje połączyć się ze skrzynką
-	$imapResource = imap_open( MAIL_MAILBOX, MAIL_ADDRESS, MAIL_PASSWORD );
+	///- 2. Filtruje, czyta wiadomości
+	$emails = $mailbox->fetch_maillist();
 
-	/// Jeśli błąd wyrzuca wyjątek z błędem połączenia.
-	if( $imapResource === false )
-		throw new Exception( imap_last_error() );
+	require "class/Invitation.php";
+	require "class/SendOn.php";
 
-?>
-
-<?php
-	/**
-	 * 2. Filtruje, czyta wiadomości
-	 */
-
-	/// Filtr przeszukiwania wiadomości, rozpatruje tylko wiadomości z ostatniego tygodnia
-	$search = 'SINCE "' . date("j F Y", strtotime("-". LAST_DAYS ." days")) . '"';
-
-	/// Ładuje przefiltrowane wiadmości
-	$emails = imap_search( $imapResource, $search );
-
-	///- Czyta wiadomości i próbuje stworzyć zaproszenia
-	include("class/Invitation.php");
-
-	$cnt_correct = 0; 		///< Licznik poprawnych
-	$cnt_saved = 0;			///< Licznik zapisanych
-
-	///- Przygotowanie do wysyłania wiadomości z powiadomieniami
-	include("class/SendOn.php");
-
+	$cnt_correct = 0; 			///< Licznik poprawnych
+	$cnt_saved = 0;				///< Licznik zapisanych
 	$sendmgr = new SendOn();	///< Zarządca wiadomości
 
 	if( ! empty( $emails ) ){
@@ -59,19 +42,18 @@
 		// Komunikat o ilości przetowrzonych wiadomości
 		echo "Przeczytano " . count( $emails ) . " wiadomości.<br/>";
 
+		///- Czyta wiadomości i próbuje stworzyć zaproszenia
 		foreach( $emails as $email ){
 
 			// Pobiera nagłówek wiadomosci
-			$overview = imap_fetch_overview( $imapResource, $email );
-			$overview = $overview[0];
+			$overview = $mailbox->fetch_overview( $email );
 
 			// Filtr nagłówka
 			if( preg_match( FILTR_ADRESAT, $overview->from ) == 0 )
 				continue;
 
 			// Przetwarza treść wiadomości
-			$message = imap_fetchbody( $imapResource, $email, 1 );
-			$message = quoted_printable_decode( $message );
+			$message = $mailbox->fetch_message( $email );
 
 			// Próbuje stworzyć zaproszenie
 			$invitation = new Invitation( $message, $overview );
@@ -81,12 +63,11 @@
 				///- inkrementuje licznik poprawnych
 				$cnt_correct++;
 
-				/**
-				 * 3. Zapisuje wiadomości do pliku danych
-				 */
-				if( $invitation->save() ){
+				///- 3. Zapisuje wiadomości do pliku danych
+				switch( $invitation->save() ){
+				case 0: // Poprawnie zapisane
 					///- inkrementuje licznik zapisanych
-					$cnt_saved++;
+					++$cnt_saved;
 
 					///- wysyłanie wiadomości na kanał discorda
 					$sendmgr->send( $invitation );
@@ -94,33 +75,18 @@
 					///- Wyświetla zapisaną wiadomość
 					echo "Zapisano nowe spotkanie do pliku.<br/>";
 					$invitation->display();
+					break;
+
+				case 1: //błąd
+					break;
+
+				case 2: // Akcje dla doplikatów
+					$mailbox->do_action( MAIL_DO_FOR_DUPLICATE, $email );
+					break;
 				}
 
-				/**
-				 * 4. Postępowanie po przeczytaniu wiadomości
-				 * \see MAIL_DO_AFTER_READ
-				 */
-				switch( MAIL_DO_AFTER_READ ){
-					// Usuwa wiadomość pernamentie
-					case 2:
-						imap_delete( $imapResource, $email );
-						echo "Usunięto wiadomość<br/>";
-						break;
-
-					// Przenosi wiadomość do skrzynki
-					case 1:
-						if( ! imap_mail_move( $imapResource, "$email", MAIL_TARGET_FOLDER ) )
-							echo "Błąd przenoszenia wiadomości do skrzynki " . MAIL_TARGET_FOLDER . "<br/>";
-
-						echo "Przeniesiono wiadomosć do " . MAIL_TARGET_FOLDER . "<br/>";
-						break;
-
-					// Pozostawia bez zmian
-					case 0: break;
-
-					// Nie znana opcja
-					default: echo "Nie znana opcja MAIL_DO_AFTER_READ<br/>"; break;
-				}
+				///- 4. Postępowanie po przeczytaniu wiadomości
+				$mailbox->do_action( MAIL_DO_AFTER_READ, $email );
 
 				echo "<hr>"; // linia horyzontalna po kazdej wiadomosci
 			}
@@ -138,8 +104,8 @@
 		echo "Usunięto przedawnionych: " . Invitation::remove_passed() . "<br/>";
 
 	/// 5. Zamyka skrzynkę
-	imap_expunge( $imapResource );
-	imap_close( $imapResource );
+	$mailbox->expunge();
+	$mailbox->close();
 
 ?>
 

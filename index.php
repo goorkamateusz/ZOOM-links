@@ -1,3 +1,10 @@
+<?php
+/**
+ * \file index.php
+ * \brief Wyświetla listę zebranych zaproszeń.
+ */
+?>
+
 <!doctype html>
 <html lang="pl">
 <head>

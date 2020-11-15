@@ -1,5 +1,9 @@
 <?php
 header('Content-type: text/html; charset=utf-8');
+/**
+ * \file Invitation.php
+ * \brief Implementuje klasę Invitation
+ */
 
 /// Tablica nazw dni tygodnia po polsku według ISO-8601 (poniedziałek - 1, niedziela - 7)
 define( "WEEK_DAY_NAME", [ "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela" ] );
@@ -148,8 +152,9 @@ class Invitation {
 	 * \brief Zapisuje do pliku, jeśli spotkanie jeszcze nie zostało zapisane.
 	 * Dane trzymane są w pliku `dane/invitation-list.json`.
 	 *
-	 * \retval true  - zakończone sukcesem
-	 * \retval false - nie powodzenie lub zaproszenie istnieje już w pliku
+	 * \retval 0 - zakończone sukcesem
+	 * \retval 1 - inne niepowodzenie
+	 * \retval 2 - znaleziono duplikat
 	 */
 	public function save(){
 
@@ -163,11 +168,11 @@ class Invitation {
 			}
 			catch( Exception $e ){
 				echo $e;
-				return false;
+				return 1;
 			}
 
 			foreach( $invlist as $inv )
-				if( $inv->link == $this->link ) return false;
+				if( $inv->link == $this->link ) return 2;
 		}
 
 		///- Do istniejących dopisuje nowe dane
@@ -175,7 +180,7 @@ class Invitation {
 		else array_push( $invlist, $this );
 
 		///- Zapisuje do pliku
-		return Invitation::save_to_file( $invlist );
+		return Invitation::save_to_file( $invlist ) ? 0 : 1;
 	}
 
 	/**

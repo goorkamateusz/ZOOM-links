@@ -45,7 +45,7 @@ define( "ZOOM_ADDRESS_DOMAIN", "zoom.us" );
  * \see Invitation::isOK()
  * \see MAIL_TARGET_FOLDER
  *
- * Możliwe wartości:
+ * *Możliwe wartości:*
  *	0	- Pozostaw wiadomości w skrzynce obiorczej;
  *	1	- Przenieś wiadomości do folderu MAIL_TARGET_FOLDER;
  *	2 	- Usuń pernamentnie wiadomości;
@@ -53,6 +53,17 @@ define( "ZOOM_ADDRESS_DOMAIN", "zoom.us" );
  * Domyślnie: 0
  */
 define( "MAIL_DO_AFTER_READ", 0 );
+
+/**
+ * Określa co aplikacja ma zrobić z wiadomościami zwierającymi duplikujące się zaproszenia.
+ * \see Invitation::save()
+ * \see MAIL_DO_AFTER_READ
+ *
+ * Obowiązują te same możliwe wartośći co w MAIL_DO_AFTER_READ.
+ *
+ * Domyślnie: 0
+ */
+define( "MAIL_DO_FOR_DUPLICATE", 0 );
 
 /**
  * Skrzynka do którego mają zostać przenoszone wiadomości zawierające zaproszenia.

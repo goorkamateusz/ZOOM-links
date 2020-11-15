@@ -1,3 +1,10 @@
+<?php
+/**
+ * \file mailbox_list.php
+ * \brief Wyświetla listę skrzynek na poczcie i sprawdza poprawność konfiugracji poczty.
+ */
+?>
+
 <!doctype html>
 <html lang="pl">
 <head>
@@ -17,7 +24,7 @@
 
 	<?php
 		// Dołącza dane konfiguracyjne
-		include("config.php");
+		require "../config.php";
 
 		/// Próbuje połączyć się ze skrzynką
 		$imapResource = imap_open( MAIL_MAILBOX, MAIL_ADDRESS, MAIL_PASSWORD );
