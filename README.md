@@ -2,17 +2,13 @@
 
 Aplikacja ZOOM-links, której zadaniem jest gromadzenie linków do spotkań w serwisie telekomunikacyjnym ZOOM ze wskazanej skrzynki mailowej.
 
-## Autor
->   **Górka Mateusz**\
->   **@maatiug**
-
 ## Spis treści
 - [ZOOM-links](#zoom-links)
-	- [Autor](#autor)
 	- [Spis treści](#spis-treści)
+	- [Autor](#autor)
 	- [Funkcjonalności](#funkcjonalności)
 	- [Uruchomienie](#uruchomienie)
-		- [Przygotownie i uruchomienie](#przygotownie-i-uruchomienie)
+		- [Przygotowanie i uruchomienie](#przygotowanie-i-uruchomienie)
 		- [Wykorzystanie](#wykorzystanie)
 		- [Dodatkowe funkcjonalności](#dodatkowe-funkcjonalności)
 	- [Uwaga](#uwaga)
@@ -22,6 +18,8 @@ Aplikacja ZOOM-links, której zadaniem jest gromadzenie linków do spotkań w se
 	- [Do dalszego rozwoju:](#do-dalszego-rozwoju)
 	- [Licencja](#licencja)
 
+## Autor
+Górka Mateusz | [goorkmateusz.github.io](https://goorkamateusz.github.io)
 
 ## Funkcjonalności
 - Gromadzenie zaproszeń na spotkania na ZOOM'ie ze skrzynki mailowej;
@@ -30,7 +28,7 @@ Aplikacja ZOOM-links, której zadaniem jest gromadzenie linków do spotkań w se
 
 
 ## Uruchomienie
-### Przygotownie i uruchomienie
+### Przygotowanie i uruchomienie
 1. Odpowiednio ustawić stałe w pliku konfiguracyjnym [config.php](config.php).
 
 Koniecznymi do skonfigurowania są:
@@ -71,7 +69,7 @@ Podgląd listy zgromadzonych zaproszeń dostępny jest na stronie generowanej pr
 
 
 ## Uwaga
-- Skrypt zależnie od configuracji `config.php` może usuwać pernamentnie przetworzone wiadomości ze skrzynki!
+- Skrypt zależnie od konfiguracji `config.php` może usuwać permanentnie przetworzone wiadomości ze skrzynki!
 
 
 ## Wyjątki / Częste błędy
@@ -94,7 +92,8 @@ Dokumentację można wygenerować poprzez polecenie `doxygen dox/Doxyfile `, wyk
 - [x] Wyświetla dzień tygodnia
 - [x] Wyświetla datę wygenerowania check-mailbox.php
 - [x] Usuwanie minionych spotkań z plików .json
-- [x] Przenoszenie maili do kosza, zamaist usuwania
+- [x] Przenoszenie maili do kosza, zamiast usuwania
+- [x] Usuwanie wiadomości zdublowanych (akcja dla zdublowanych)
 - [ ] Tekstowe dodawanie zaproszeń. (inna treść, okno tekstowe copy-paste)
 - [ ] Rozbudować interface w index.php
 - [ ] Gromadzenie recent-from - przesłane od, aby analizować z której skrzynki przesłano wiadomości
@@ -102,9 +101,6 @@ Dokumentację można wygenerować poprzez polecenie `doxygen dox/Doxyfile `, wyk
 - [ ] Przycisk "wyślij ponownie" w index.php
   - skrypt, który dostaje po GET link do zaproszenia i znajduje zaproszenie i wysyła na discorda
 
-- [ ] Usuwanie wiadomości zdublowanych (akcja dla zdublowanych)
-  - config.php DO_FOR_DUBLICAT ...  (?)
-  - if( $inv->save() ) {...} else: wywolanie_usuwania()
 
 Całość listy ToDo do wygenerowania z komentarzy kodu.
 
