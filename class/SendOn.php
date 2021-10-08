@@ -1,11 +1,11 @@
 <?php
+
 /**
  * \file SendOn.php
  * \brief Plik zajmuje się wysyłaniem zaproszeń na następne kanały
  *
  * Obsługuje:
- * 	- wysyłka na wybrane kanały Discorda
- *
+ * 	- wysyłka na wybrane kanały Discord'a
  */
 
 /// Załadowanie agorlov/discordmsg
@@ -16,7 +16,7 @@ require_once 'discordmsg/DiscordMsg.php';
 require_once 'config.php';
 
 /// Nazwa pliku zawierająca tablicę filtrów i kanałów wysyłki
-define( "DISCORD_CHANNEL_JSON", "discord-channel.json" );
+define("DISCORD_CHANNEL_JSON", "discord-channel.json");
 
 /**
  * \brief Klasa zarządzająca wysyłaniem wiadomości
@@ -29,7 +29,8 @@ define( "DISCORD_CHANNEL_JSON", "discord-channel.json" );
  * 	[https://github.com/agorlov/discordmsg](https://github.com/agorlov/discordmsg)
  *
  */
-class SendOn {
+class SendOn
+{
 
 	/**
 	 * \brief Struktura zawierająca adresy kanałów zaimportowane z DISCORD_CHANNEL_JSON
@@ -40,71 +41,70 @@ class SendOn {
 	/**
 	 * \brief Konstruktor SendOn
 	 */
-	public function __construct(){
+	public function __construct()
+	{
 		///- Inicjuje $discord_channels
 		$this->import_once();
 	}
 
 	/**
-	 * \brief Wysyla wiadomosc na kanal zgodny z zaproszeniem.
+	 * \brief Wysyła wiadomość na kanał zgodny z zaproszeniem.
 	 *
 	 * Do generowania pliku discord-channel.json służy skrypt admin/discord-json.py
 	 *
 	 * \post Wymaga inicjalizacji $discord_channels przez konstruktor
 	 * \param $invitation - zaproszenie, klasy Invitation
 	 */
-	public function send( $invitation ){
+	public function send($invitation)
+	{
 
 		// Znajduje link
-		$link = $this->find_channel( $invitation ) ?? DISCORD_DEFAULT ;
+		$link = $this->find_channel($invitation) ?? DISCORD_DEFAULT;
 
-		if( $link != "" ){
+		if ($link != "") {
 
-			// Wysyla wiadomosc
+			// Wysyła wiadomość
 			try {
 				(new \AG\DiscordMsg(
-					$invitation->message(),					// wiadomosc
+					$invitation->message(),					// wiadomość
 					$link,									// discord webhook link
 					$invitation->lecturer,					// bot name
 					'' 										// avatar url
 				))->send();
-
+			} catch (Exception $e) {
+				echo "Błąd Discord:<br><b>$e</b><br>";
 			}
-			catch( Exception $e ) {
-				echo "Błąd Diskord:<br><b>$e</b><br>";
-			}
-		}
-		else {
+		} else {
 			echo "Brak linku do kanału.<br>";
 		}
-
 	}
 
 	/**
 	 * \brief Importuje plik DISCORD_CHANNEL_FILE.
 	 * Inicjuje $discord_channels
 	 */
-	private function import_once(){
-		///- Wykonje sie tylko jeśli $discord_channels == null
-		if( $this->discord_channels == null ){
+	private function import_once()
+	{
+		///- Wykonie sie tylko jeśli $discord_channels == null
+		if ($this->discord_channels == null) {
 
 			///- Wczytywanie zawartości pliku
-			if( ! file_exists( DISCORD_CHANNEL_JSON ) )
-				throw new Exception("Konfiguracja kanałów discorda nie istnieje");
+			if (!file_exists(DISCORD_CHANNEL_JSON))
+				throw new Exception("Konfiguracja kanałów discords nie istnieje");
 
-			$file = fopen( DISCORD_CHANNEL_JSON, "r" )
+			$file = fopen(DISCORD_CHANNEL_JSON, "r")
 				or die("Błąd otwierania pliku DISCORD_CHANNEL_JSON");
 
 			$json = '';
-			while( ! feof( $file ) ) $json .= fgets( $file );
+			while (!feof($file)) $json .= fgets($file);
 
-			fclose( $file );
+			fclose($file);
 
 			///- Dekodowanie JSON'a
-			$this->discord_channels = json_decode( utf8_encode($json) );
+			$this->discord_channels = json_decode(utf8_encode($json));
 
-			if( json_last_error() != JSON_ERROR_NONE )
-				throw new Exception( json_last_error_msg() );
+			if (json_last_error() != JSON_ERROR_NONE)
+				throw new Exception(json_last_error_msg());
 		}
 	}
 
@@ -112,26 +112,28 @@ class SendOn {
 	 * \brief Funkcja znajduje kanał na podstawie zaproszenia
 	 * \return string|null
 	 * \retval null   - jeśli nie znaleziono kanału
-	 * \retval string - link do kanału (kodownaie?)
+	 * \retval string - link do kanału (kodowanie?)
 	 */
-	private function find_channel( $invitation ){
+	private function find_channel($invitation)
+	{
+		foreach ($this->discord_channels as $lect) {
+			if ($lect->lect == $invitation->lecturer) {
 
-		foreach( $this->discord_channels as $lect )
-			if( $lect->lect == $invitation->lecturer ){
-
-				// Sprawdza wszystkie terminy prowadzacych
-				foreach( $lect->term as $term )
-					if( $this->same_term( $term, $invitation->date->date ) ){
-						if( $term->disc != "" )
+				// Sprawdza wszystkie terminy prowadzących
+				foreach ($lect->term as $term)
+					if ($this->same_term($term, $invitation->date->date)) {
+						if ($term->disc != "") {
 							return $term->disc;
-						else
-							// Sprawdza czy jest glowny kanal prowadzacego, jesli istnieje termin, ale nie ma linku
-							return ( $lect->disc == "" )? null : $lect->disc;
+						} else {
+							// Sprawdza czy jest główny kanał prowadzącego, jesli istnieje termin, ale nie ma linku
+							return ($lect->disc == "") ? null : $lect->disc;
+						}
 					}
 
-				// Sprawdza czy jest glowny kanal prowadzacego (jśli nie znalazł termin w $lect->term)
-				if( $lect->disc != "" ) return $lect->disc;
+				// Sprawdza czy jest główny kanał prowadzącego (jśli nie znalazł termin w $lect->term)
+				if ($lect->disc != "") return $lect->disc;
 			}
+		}
 
 		return null;
 	}
@@ -144,27 +146,30 @@ class SendOn {
 	 * \retval true  - tak
 	 * \retval false - nie
 	 */
-	private function same_term( $term, $st ){
-
-		// Wczytanie spotkania daty ze stringu
-		$date = mktime(	$st[11].$st[12], $st[14].$st[15], $st[17].$st[18],
-						$st[5].$st[6], $st[8].$st[9], $st[0].$st[1].$st[2].$st[3] );
+	private function same_term($term, $st)
+	{
+		// Wczytanie spotkania daty ze string'a
+		$date = mktime(
+			$st[11] . $st[12],
+			$st[14] . $st[15],
+			$st[17] . $st[18],
+			$st[5] . $st[6],
+			$st[8] . $st[9],
+			$st[0] . $st[1] . $st[2] . $st[3]
+		);
 
 		// Sprawdzenie warunków tygodnia i dnia
-		if( ( ((int) date("W", $date ) )%2 ? "N" : "P" )	!= $term->week ) return false;
-		if( (int) date("N", $date ) 						!= $term->day  ) return false;
+		if ((((int) date("W", $date)) % 2 ? "N" : "P")	!= $term->week) return false;
+		if ((int) date("N", $date) 						!= $term->day) return false;
 
 		// Sprawdzenie warunków godziny (z tolerancją)
-		$term_hour = explode(":", $term->hour );
-		if( date("H", $date ) 	!= $term_hour[0] 	) return false;
+		$term_hour = explode(":", $term->hour);
+		if (date("H", $date) 	!= $term_hour[0]) return false;
 
-		$date_min = (int) date("i", $date) ;
-		if( $date_min > (int) $term_hour[1] + 15  	) return false; 	//15 = 15min tolerancji
-		if( $date_min < (int) $term_hour[1] - 15 	) return false;
+		$date_min = (int) date("i", $date);
+		if ($date_min > (int) $term_hour[1] + 15) return false; 	//15 = 15min tolerancji
+		if ($date_min < (int) $term_hour[1] - 15) return false;
 
 		return true;
 	}
-
 };
-
-?>
