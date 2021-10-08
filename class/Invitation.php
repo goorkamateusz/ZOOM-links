@@ -250,7 +250,6 @@ class Invitation
 	 */
 	private static function remove_passed_from_array(&$invList)
 	{
-
 		// Starsze niż $stamens usuwaj
 		$stamens = strtotime("-" . LAST_DAYS . " days");
 		// Licznik aktualnej pozycji
@@ -290,12 +289,12 @@ class Invitation
 		fclose($file);
 
 		///- Przetwarza plik json do tablicy obiektów
-		$json = json_decode(utf8_encode($json));
+		$decoded = json_decode(utf8_encode($json));
 
 		if (json_last_error() != JSON_ERROR_NONE)
 			throw new Exception("Pobierane zaproszeń z pliku: " . json_last_error_msg());
 
 		///- Zwraca tabelę zaproszeń z pliku
-		return $json;
+		return $decoded;
 	}
 };

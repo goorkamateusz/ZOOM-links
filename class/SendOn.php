@@ -31,7 +31,6 @@ define("DISCORD_CHANNEL_JSON", "discord-channel.json");
  */
 class SendOn
 {
-
 	/**
 	 * \brief Struktura zawierająca adresy kanałów zaimportowane z DISCORD_CHANNEL_JSON
 	 * Inicjowana przez import_once() wywoływanym przez konstruktor.
@@ -57,7 +56,6 @@ class SendOn
 	 */
 	public function send($invitation)
 	{
-
 		// Znajduje link
 		$link = $this->find_channel($invitation) ?? DISCORD_DEFAULT;
 

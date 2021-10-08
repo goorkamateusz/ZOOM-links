@@ -128,8 +128,6 @@
                 $class = "today";
             } elseif (new DateTime($inv->date->date) < new DateTime()) {
                 $class = "passed";
-            } else {
-                //?
             }
             ?>
 
@@ -137,7 +135,8 @@
                 <?php echo $inv->html(); ?>
             </div>
 
-        <?php endforeach;
+        <?php
+        endforeach;
         ?>
     </main>
 
